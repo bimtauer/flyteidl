@@ -43,6 +43,20 @@ message Secret {
     // will depend on the key management system.
     // +optional
     MountType mount_requirement = 4;
+
+    // secret_config is optional. It can be used to pass additional configuration to secret managers. Implementations can 
+    // depend on the used secret manager. For now only used by Vault Secret Manager.
+    // +optional
+    SecretConfig secret_config = 5;
+}
+
+// SecretConfig encapsulates additional configuration options for secret managers. Protobuf does not support inheritance 
+// so the idea is to keep this generic class as a superset of all possible configuration options (VaultConfig, AWSConfig, etc.)
+// and leave it up to specific implementations in Flytekit to either set those fields or leave them at their default.
+message SecretConfig {
+    // templates are used to format Vault secrets upon retrieval. They are strings written in the consul template language.
+    // +optional
+    string template = 1;
 }
 
 // OAuth2Client encapsulates OAuth2 Client Credentials to be used when making calls on behalf of that task.
